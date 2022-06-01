@@ -20,11 +20,11 @@ public class UserService {
     private final UserRepository userRepository;
     private final RoleRepository roleRepository;
 
-    public List<User> getAllUsers(){
+    public List<User> getAllUsers() {
         return userRepository.findAll();
     }
 
-    public void createSuperUser(PasswordEncoder passwordEncoder){
+    public void createSuperUser(PasswordEncoder passwordEncoder) {
 
         User user = new User();
         user.setLastName("John");
@@ -33,7 +33,7 @@ public class UserService {
         user.setPassword(passwordEncoder.encode("password"));
         user.setRoles(Collections.singletonList(roleRepository.findByRoleName(RoleEnum.ADMIN.getRoleName())));
         userRepository.save(user);
-        log.info("Created super user {}",user.getEmail());
+        log.info("Created super user {}", user.getEmail());
     }
 
     public User createUser(UserDto userDto) {
@@ -44,5 +44,9 @@ public class UserService {
         user.setRoles(Collections.singletonList(roleRepository.findByRoleName(RoleEnum.USER.getRoleName())));
         user.setLastName(userDto.getLastName());
         return userRepository.save(user);
+    }
+
+    public User findByEmail(String email) {
+        return userRepository.findByEmail(email);
     }
 }
