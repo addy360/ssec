@@ -40,6 +40,8 @@ public class UserService {
         User user = new User();
         user.setEmail(userDto.getEmail());
         user.setFirstName(userDto.getFirstName());
+        user.setPassword(user.getPassword());
+        user.setRoles(Collections.singletonList(roleRepository.findByRoleName(RoleEnum.USER.getRoleName())));
         user.setLastName(userDto.getLastName());
         return userRepository.save(user);
     }
