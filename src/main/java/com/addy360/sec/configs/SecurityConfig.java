@@ -23,7 +23,8 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                 .authorizeRequests()
                 .antMatchers("/users").authenticated()
                 .and().sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS)
-                .and().formLogin().and().addFilter(new AuthFilter(this.authenticationManager()));
+                .and().formLogin()
+                .and().addFilter(new AuthFilter(this.authenticationManager()));
     }
 
 

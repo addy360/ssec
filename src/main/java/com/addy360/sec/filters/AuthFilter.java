@@ -2,7 +2,9 @@ package com.addy360.sec.filters;
 
 import com.auth0.jwt.JWT;
 import com.auth0.jwt.algorithms.Algorithm;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.boot.system.ApplicationTemp;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
@@ -13,14 +15,13 @@ import org.springframework.security.web.authentication.UsernamePasswordAuthentic
 
 import javax.servlet.FilterChain;
 import javax.servlet.ServletException;
-import javax.servlet.ServletRequest;
-import javax.servlet.ServletResponse;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.time.Duration;
-import java.time.LocalDateTime;
 import java.util.Date;
+import java.util.HashMap;
+import java.util.Map;
 import java.util.stream.Collectors;
 
 
@@ -59,15 +60,18 @@ public class AuthFilter extends UsernamePasswordAuthenticationFilter {
                 .withIssuer(request.getRequestURL().toString())
                 .sign(algorithm);
 
-        response.setHeader("access-token", token);
-        response.setHeader("refresh-token", refreshToken);
+//        response.setHeader("access-token", token);
+//        response.setHeader("refresh-token", refreshToken);
 
+        Map<String,String> res = new HashMap<>();
+        res.put("access-token", token);
+        res.put("refresh-token", refreshToken);
+
+        response.setContentType("application/json");
+
+        new ObjectMapper().writeValue(response.getOutputStream(),res);
 
         super.successfulAuthentication(request, response, chain, authResult);
     }
 
-    @Override
-    public void doFilter(ServletRequest request, ServletResponse response, FilterChain chain) throws IOException, ServletException {
-        super.doFilter(request, response, chain);
-    }
 }
